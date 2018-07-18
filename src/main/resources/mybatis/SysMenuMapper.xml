@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zoudong.permission.mapper.SysMenuMapper">
+  <resultMap id="BaseResultMap" type="com.zoudong.permission.model.SysMenu">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="pcode" jdbcType="VARCHAR" property="pcode" />
+    <result column="pcodes" jdbcType="VARCHAR" property="pcodes" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="icon" jdbcType="VARCHAR" property="icon" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="permission_code" jdbcType="VARCHAR" property="permissionCode" />
+    <result column="num" jdbcType="INTEGER" property="num" />
+    <result column="levels" jdbcType="INTEGER" property="levels" />
+    <result column="ismenu" jdbcType="INTEGER" property="ismenu" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="isopen" jdbcType="INTEGER" property="isopen" />
+    <result column="version" jdbcType="BIGINT" property="version" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    id, code, pcode, pcodes, name, icon, url, permission_code, num, levels, ismenu, description, 
+    status, isopen, version, create_time, update_time
+  </sql>
+</mapper>

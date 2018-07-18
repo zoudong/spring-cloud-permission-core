@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.zoudong.permission</groupId>
+    <artifactId>com.zoudong.permission</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <name>permission-systeam</name>
+    <description>permission-systeam</description>
+
+
+    <properties>
+        <java.version>1.8</java.version>
+        <spring-boot.version>1.5.13.RELEASE</spring-boot.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+        <commons.lang3.version>3.6</commons.lang3.version>
+        <jjwt.version>0.9.0</jjwt.version>
+        <lombok.version>1.16.10</lombok.version>
+        <tk.mybatis.version>2.0.2</tk.mybatis.version>
+        <pagehelper.version>1.2.3</pagehelper.version>
+        <fastjson.version>1.2.22</fastjson.version>
+        <mysql-connector-java.version>5.1.46</mysql-connector-java.version>
+        <druid-spring-boot-starter.version>1.1.10</druid-spring-boot-starter.version>
+
+
+        <shiro.version>1.4.0</shiro.version>
+
+    </properties>
+
+
+    <dependencies>
+
+        <dependency>
+            <groupId>com.zoudong.permission</groupId>
+            <artifactId>com.zoudong.permission.facade</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>${spring-boot.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <version>${spring-boot.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+            <version>${spring-boot.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+            <version>${spring-boot.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-cache</artifactId>
+            <version>${spring-boot.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-eureka</artifactId>
+            <version>1.4.5.RELEASE</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-feign</artifactId>
+            <version>1.4.5.RELEASE</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>tk.mybatis</groupId>
+            <artifactId>mapper-spring-boot-starter</artifactId>
+            <version>${tk.mybatis.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper-spring-boot-starter</artifactId>
+            <version>${pagehelper.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${commons.lang3.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>${fastjson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>${jjwt.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>${mysql-connector-java.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid-spring-boot-starter</artifactId>
+            <version>${druid-spring-boot-starter.version}</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>net.sf.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
+            <version>2.10.5</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+
+
+
+
+
+
+
+
+
+
+    </dependencies>
+
+
+    <profiles>
+        <profile>
+            <id>local</id>
+            <properties>
+
+
+                <eureka.ip>192.168.1.30</eureka.ip>
+                <eureka.port>8889</eureka.port>
+                <client.ip>192.168.1.30</client.ip>
+
+
+                <datasource.url>jdbc:mysql://127.0.0.1:3306/permission?useUnicode=true&amp;characterEncoding=UTF-8&amp;allowMultiQueries=true&amp;zeroDateTimeBehavior=convertToNull&amp;serverTimezone=UTC&amp;useSSL=false</datasource.url>
+                <datasource.username>root</datasource.username>
+                <datasource.password>123456</datasource.password>
+
+                <spring.redis.host>127.0.0.1</spring.redis.host>
+                <spring.redis.port>6379</spring.redis.port>
+                <spring.redis.password></spring.redis.password>
+
+                <publicKey>MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDsy4VQ5DP73X6jCWQJgS21bIX0DJMby+IPjP3J31Feo2jRMRPO8keUJ6ZQmBpyuVFIgSb3uzQ1fDEwl06hH71MBMIzINOMDFTxMUrEgateWmHwjU36hwFuGvYtcSzuXSXm1KMXavG5ABpRWAiocBBaxO/slYV0eOUdcnMkt+VttQIDAQAB</publicKey>
+                <privateKey>MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBAOzLhVDkM/vdfqMJZAmBLbVshfQMkxvL4g+M/cnfUV6jaNExE87yR5QnplCYGnK5UUiBJve7NDV8MTCXTqEfvUwEwjMg04wMVPExSsSBq15aYfCNTfqHAW4a9i1xLO5dJebUoxdq8bkAGlFYCKhwEFrE7+yVhXR45R1ycyS35W21AgMBAAECgYEAqTYGXne0bhcpl3fudJxK/Yo/btZNiV94e4RVFxzuGKLNFC/t58RaQhTTVGRdAf5Lh3RDVGQCOvY0cHSvS5RSv8/bWoUlvwRtGsRQKwXZ/S9B2nuUf+6pEQklMnHE9ogqJdKRMB9LbpSYkcPT0qN8WA2i6BVLW6LsEx6lTJri7AECQQD9xDafqvTFqp02etxi2QiNklbjIcFdz4cexYe3kwm1LAj+A/E1QC2dbrG+AHoDfyZjVZ2CzNnJ+wzSUgS0nA7RAkEA7uEROuzrW8PIpU1q7hQAj9sBJVL+SDHRBSoconiGY2cHk1NOLVJPeV8PT08qL5yvvCctnjQYSZd32+g2qhQRpQJAVgTX20Gw3PwbdGcrI1qcOpj7WNyNVkZNcBHXElQGO2Jk3e3qKnnJvI7UMyqoMV09XvibfsX/oSa3Tue8bphjsQJATuByWAqzDHHxZuPRUxu3s8iU8EYfQKdyZUoqelthxKDYl4UCY2SyaVlCLOXvABm0zWQCZCK/gk1JfouGwVIvIQJBAKE/Mle+fBE4+XiD+i0qOcsgvNHjHDcXu09pe1wmUrQJMAQYZaczAmR42x5RVovysFN4wH/1cz2kOK9c0pQsaeI=</privateKey>
+
+            </properties>
+        </profile>
+    </profiles>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <!-- mybatis generator 自动生成代码插件 -->
+            <plugin>
+                <groupId>org.mybatis.generator</groupId>
+                <artifactId>mybatis-generator-maven-plugin</artifactId>
+                <version>1.3.6</version>
+                <configuration>
+                    <configurationFile>${basedir}/src/main/resources/generator/generatorConfig.xml</configurationFile>
+                    <overwrite>true</overwrite>
+                    <verbose>true</verbose>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>mysql</groupId>
+                        <artifactId>mysql-connector-java</artifactId>
+                        <version>${mysql-connector-java.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>tk.mybatis</groupId>
+                        <artifactId>mapper</artifactId>
+                        <version>4.0.2</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <configuration>
+                    <useDefaultDelimiters>false</useDefaultDelimiters>
+                    <delimiters>
+                        <delimiter>${*}</delimiter>
+                    </delimiters>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+
+
+
+
+        </plugins>
+    </build>
+
+
+</project>

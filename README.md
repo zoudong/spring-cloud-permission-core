@@ -1,0 +1,3 @@
+# spring-cloud-permission-core
+this is a 分布式权限系统……
+基于spring cloud体系的权限管理中心系统,shiro已经不太适合无状态的分布式架构权限管理了，全新做一个基于分布式系统的搞性能权限中心。
