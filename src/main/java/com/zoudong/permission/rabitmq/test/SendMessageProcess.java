@@ -1,5 +1,6 @@
 package com.zoudong.permission.rabitmq.test;
 
+import com.zoudong.permission.exception.BusinessException;
 import com.zoudong.permission.model.SysUser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Component;
  * @date 2018/7/19 15:15
  */
 @Slf4j
-@Async
+//@Async
 @Component
 public class SendMessageProcess {
     @Autowired
@@ -21,7 +22,10 @@ public class SendMessageProcess {
     public void send(){
             try {
                 log.info("RABBITMQ发送消息开始");
-                outPutExchange.outputPermissionExchange().send(MessageBuilder.withPayload(new SysUser()).build());
+                boolean result=outPutExchange.outputPermissionExchange().send(MessageBuilder.withPayload(new SysUser()).build());
+                if(!result){
+                    throw new BusinessException("mq_send_error","消息发送失败");
+                }
                 log.info("RABBITMQ发送消息结束");
             }catch (Exception e){
                 log.info("RABBITMQ发送取消息出错,非重要消息忽略错误。");
