@@ -33,9 +33,9 @@ public class SysUserServiceImpl implements SysUserService {
 
     @Autowired
     private JwtUtil jwtUtil;
+
     @Autowired
     private RedisUtils redisUtils;
-
 
     @Autowired
     private SysUserMapper sysUserMapper;
@@ -52,7 +52,12 @@ public class SysUserServiceImpl implements SysUserService {
     @Autowired
     private SysPermissionMapper sysPermissionMapper;
 
-
+    /**
+     * 无状态登录
+     * @param sysUserLoginParam
+     * @return
+     * @throws Exception
+     */
     @Override
     public String apiLogin(SysUserLoginParam sysUserLoginParam) throws Exception {
         String account = sysUserLoginParam.getAccount();
@@ -93,15 +98,6 @@ public class SysUserServiceImpl implements SysUserService {
 
         return token;
     }
-
-    @Override
-    public PageInfo<SysUser> queryAllSysUser(QuerySysUserParam querySysUserParam) throws Exception {
-        PageHelper.startPage(querySysUserParam.getPageNum(), querySysUserParam.getPageSize());
-        List<SysUser> sysUserList = sysUserMapper.selectAll();
-        PageInfo<SysUser> pageInfo = new PageInfo<>(sysUserList);
-        return pageInfo;
-    }
-
 
 
     /**
@@ -170,6 +166,12 @@ public class SysUserServiceImpl implements SysUserService {
         return userInfo;
     }
 
+
+
+
+
+
+
     /**
      * 通过某个属性去重复对象
      *
@@ -186,6 +188,16 @@ public class SysUserServiceImpl implements SysUserService {
         }
         return list;
     }
+
+
+    @Override
+    public PageInfo<SysUser> queryAllSysUser(QuerySysUserParam querySysUserParam) throws Exception {
+        PageHelper.startPage(querySysUserParam.getPageNum(), querySysUserParam.getPageSize());
+        List<SysUser> sysUserList = sysUserMapper.selectAll();
+        PageInfo<SysUser> pageInfo = new PageInfo<>(sysUserList);
+        return pageInfo;
+    }
+
 
 
 }

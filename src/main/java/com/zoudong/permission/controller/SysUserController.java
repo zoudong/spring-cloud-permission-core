@@ -8,7 +8,9 @@ import com.zoudong.permission.mapper.SysResourceMapper;
 import com.zoudong.permission.model.SysUser;
 import com.zoudong.permission.param.user.login.SysUserLoginParam;
 import com.zoudong.permission.param.user.query.QuerySysUserParam;
+import com.zoudong.permission.rabitmq.test.SendMessageProcess;
 import com.zoudong.permission.result.base.BaseResult;
+import com.zoudong.permission.result.base.ResultUtil;
 import com.zoudong.permission.result.user.SysUserVO;
 import com.zoudong.permission.service.api.SysUserService;
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +36,9 @@ public class SysUserController {
 
     @Autowired
     private SysResourceMapper sysResourceMapper;
+
+    @Autowired
+    private SendMessageProcess sendMessageProcess;
 
     /**
      * 未登录，shiro应重定向到登录界面，此处返回未登录状态信息由前端控制跳转页面
@@ -71,6 +76,15 @@ public class SysUserController {
         String jwtToken = sysUserService.apiLogin(sysUserLoginParam);
         log.info("结束用户API接口登录:{}", jwtToken);
         return fillSuccesData(jwtToken);
+
+    }
+
+    @RequestMapping(value = "/permission/mqtest", method = RequestMethod.GET)
+    public BaseResult<String> mqtest()throws Exception {
+        log.info("开始测试mq消息发送:");
+        sendMessageProcess.send();
+        log.info("结束测试mq消息发送:");
+        return ResultUtil.succes();
 
     }
 

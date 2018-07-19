@@ -28,7 +28,6 @@
         <druid-spring-boot-starter.version>1.1.10</druid-spring-boot-starter.version>
 
 
-        <shiro.version>1.4.0</shiro.version>
 
     </properties>
 
@@ -141,8 +140,17 @@
             </exclusions>
         </dependency>
 
-
-
+        <!--rabit依赖-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-amqp</artifactId>
+            <version>${spring-boot.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-stream-rabbit</artifactId>
+            <version>1.3.4.RELEASE</version>
+        </dependency>
 
 
 
@@ -164,15 +172,25 @@
                 <eureka.port>8889</eureka.port>
                 <client.ip>192.168.1.30</client.ip>
 
-
+                <!--mysql-->
                 <datasource.url>jdbc:mysql://127.0.0.1:3306/permission?useUnicode=true&amp;characterEncoding=UTF-8&amp;allowMultiQueries=true&amp;zeroDateTimeBehavior=convertToNull&amp;serverTimezone=UTC&amp;useSSL=false</datasource.url>
                 <datasource.username>root</datasource.username>
                 <datasource.password>123456</datasource.password>
 
+                <!--redis-->
                 <spring.redis.host>127.0.0.1</spring.redis.host>
                 <spring.redis.port>6379</spring.redis.port>
                 <spring.redis.password></spring.redis.password>
 
+
+                <!-- rabbitmq -->
+                <spring.rabbitmq.host>192.168.1.252</spring.rabbitmq.host>
+                <spring.rabbitmq.port>5672</spring.rabbitmq.port>
+                <spring.rabbitmq.username>guest</spring.rabbitmq.username>
+                <spring.rabbitmq.password>guest</spring.rabbitmq.password>
+                <spring.rabbitmq.virtual-host>/</spring.rabbitmq.virtual-host>
+
+                <!--rsa-->
                 <publicKey>MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDsy4VQ5DP73X6jCWQJgS21bIX0DJMby+IPjP3J31Feo2jRMRPO8keUJ6ZQmBpyuVFIgSb3uzQ1fDEwl06hH71MBMIzINOMDFTxMUrEgateWmHwjU36hwFuGvYtcSzuXSXm1KMXavG5ABpRWAiocBBaxO/slYV0eOUdcnMkt+VttQIDAQAB</publicKey>
                 <privateKey>MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBAOzLhVDkM/vdfqMJZAmBLbVshfQMkxvL4g+M/cnfUV6jaNExE87yR5QnplCYGnK5UUiBJve7NDV8MTCXTqEfvUwEwjMg04wMVPExSsSBq15aYfCNTfqHAW4a9i1xLO5dJebUoxdq8bkAGlFYCKhwEFrE7+yVhXR45R1ycyS35W21AgMBAAECgYEAqTYGXne0bhcpl3fudJxK/Yo/btZNiV94e4RVFxzuGKLNFC/t58RaQhTTVGRdAf5Lh3RDVGQCOvY0cHSvS5RSv8/bWoUlvwRtGsRQKwXZ/S9B2nuUf+6pEQklMnHE9ogqJdKRMB9LbpSYkcPT0qN8WA2i6BVLW6LsEx6lTJri7AECQQD9xDafqvTFqp02etxi2QiNklbjIcFdz4cexYe3kwm1LAj+A/E1QC2dbrG+AHoDfyZjVZ2CzNnJ+wzSUgS0nA7RAkEA7uEROuzrW8PIpU1q7hQAj9sBJVL+SDHRBSoconiGY2cHk1NOLVJPeV8PT08qL5yvvCctnjQYSZd32+g2qhQRpQJAVgTX20Gw3PwbdGcrI1qcOpj7WNyNVkZNcBHXElQGO2Jk3e3qKnnJvI7UMyqoMV09XvibfsX/oSa3Tue8bphjsQJATuByWAqzDHHxZuPRUxu3s8iU8EYfQKdyZUoqelthxKDYl4UCY2SyaVlCLOXvABm0zWQCZCK/gk1JfouGwVIvIQJBAKE/Mle+fBE4+XiD+i0qOcsgvNHjHDcXu09pe1wmUrQJMAQYZaczAmR42x5RVovysFN4wH/1cz2kOK9c0pQsaeI=</privateKey>
 
