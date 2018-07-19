@@ -32,7 +32,7 @@ public class TokenCheckInterceptor implements HandlerInterceptor {
             return true;
         }
         String token = httpServletRequest.getHeader("Authentication");
-        if (StringUtils.isBlank(token)) {
+        if (!StringUtils.isBlank(token)) {
 
             RedisUtils redisUtils = (RedisUtils) SpringUtils.getBean("redisUtils");
             SysUser superUserInfo = (SysUser) redisUtils.get(PermissionCoreConstant.permission_token + token);
