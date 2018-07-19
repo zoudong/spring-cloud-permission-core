@@ -52,7 +52,7 @@ public class SysUserController {
         log.info("开始分页查询全部用户:{}", querySysUserParam);
         PageInfo<SysUser> pageInfo = sysUserService.queryAllSysUser(querySysUserParam);
         PageInfo<SysUserVO> pageInfoVO=new PageInfo<>();
-        BeanUtils.copyProperties(pageInfoVO,pageInfo);
+        BeanUtils.copyProperties(pageInfo,pageInfoVO);
         log.info("结束分页查询全部用户:{}", pageInfoVO);
         return fillSuccesData(pageInfoVO);
        /* } catch (BusinessException e) {

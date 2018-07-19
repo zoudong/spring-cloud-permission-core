@@ -4,6 +4,7 @@ package com.zoudong.permission.config.interceptor;
 import com.zoudong.permission.annotation.RequiresPermissions;
 import com.zoudong.permission.constant.Logical;
 import com.zoudong.permission.constant.PermissionCoreConstant;
+import com.zoudong.permission.exception.BusinessException;
 import com.zoudong.permission.model.SysPermission;
 import com.zoudong.permission.model.SysUser;
 import com.zoudong.permission.utils.RedisUtils;
@@ -27,30 +28,34 @@ public class TokenCheckInterceptor implements HandlerInterceptor {
         if (requiresPermissions == null) {
             return true;
         }
-        //之后搞成一个通配列表
-        if(httpServletRequest.getServletContext().getContextPath()=="/permission/apiLogin"){
-            return true;
-        }
-        String token = httpServletRequest.getHeader("Authentication");
+        //之后搞成一个通配列表(不需要，权限判断由注解按需取用)
+        /**if(httpServletRequest.getServletPath()=="/permission/apiLogin"){
+         return true;
+         }**/
+        String token = httpServletRequest.getHeader("Authorization");
         if (!StringUtils.isBlank(token)) {
 
             RedisUtils redisUtils = (RedisUtils) SpringUtils.getBean("redisUtils");
             SysUser superUserInfo = (SysUser) redisUtils.get(PermissionCoreConstant.permission_token + token);
-
+            if (superUserInfo == null) {
+                throw new BusinessException("token_error", "认证token无效,请重新登录后重试！");
+                //return false;
+            }
 
             String[] perms = this.getAnnotationValue(requiresPermissions);
             if (Logical.AND.equals(requiresPermissions.logical())) {
                 boolean isPerm;
                 for (String perm : perms) {
-                    isPerm=false;
+                    isPerm = false;
                     for (SysPermission sysPermission : superUserInfo.getPermissionList()) {
-                        if(perm.equals(sysPermission.getPermissionCode())){
-                            isPerm=true;
+                        if (perm.equals(sysPermission.getPermissionCode())) {
+                            isPerm = true;
                             break;
                         }
                     }
-                    if(isPerm!=true){
-                        return false;
+                    if (isPerm != true) {
+                        throw new BusinessException("token_error", "认证token权限不够,请重新配置后重试！");
+                        //return false;
                     }
 
                 }
@@ -58,14 +63,14 @@ public class TokenCheckInterceptor implements HandlerInterceptor {
             if (Logical.OR.equals(requiresPermissions.logical())) {
                 for (String perm : perms) {
                     for (SysPermission sysPermission : superUserInfo.getPermissionList()) {
-                        if(perm.equals(sysPermission.getPermissionCode())){
+                        if (perm.equals(sysPermission.getPermissionCode())) {
                             return true;
                         }
                     }
                 }
             }
-
-            return false;
+            throw new BusinessException("token_error", "恭喜你绕过了所有安全机制,但还是token无效！");
+            //return false;
         } else {
 
             return true;
