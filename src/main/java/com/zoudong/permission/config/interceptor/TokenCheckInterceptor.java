@@ -4,6 +4,7 @@ package com.zoudong.permission.config.interceptor;
 import com.zoudong.permission.annotation.RequiresPermissions;
 import com.zoudong.permission.constant.Logical;
 import com.zoudong.permission.constant.PermissionCoreConstant;
+import com.zoudong.permission.constant.PermissionThreadLocal;
 import com.zoudong.permission.exception.BusinessException;
 import com.zoudong.permission.model.SysPermission;
 import com.zoudong.permission.model.SysUser;
@@ -34,14 +35,16 @@ public class TokenCheckInterceptor implements HandlerInterceptor {
          }**/
         String token = httpServletRequest.getHeader("Authorization");
         if (!StringUtils.isBlank(token)) {
-
+            //把token放入本地线程变量要用的时候方便
+            PermissionThreadLocal.tokenThreadLocal.set(token);
             RedisUtils redisUtils = (RedisUtils) SpringUtils.getBean("redisUtils");
             SysUser superUserInfo = (SysUser) redisUtils.get(PermissionCoreConstant.permission_token + token);
             if (superUserInfo == null) {
                 throw new BusinessException("token_error", "认证token无效,请重新登录后重试！");
                 //return false;
             }
-
+            //把userinfo放入本地线程变量要用的时候方便
+            PermissionThreadLocal.userThreadLocal.set(superUserInfo);
             String[] perms = this.getAnnotationValue(requiresPermissions);
             if (Logical.AND.equals(requiresPermissions.logical())) {
                 boolean isPerm;
