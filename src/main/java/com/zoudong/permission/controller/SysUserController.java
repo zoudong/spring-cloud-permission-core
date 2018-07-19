@@ -40,14 +40,14 @@ public class SysUserController {
     @Autowired
     private SendMessageProcess sendMessageProcess;
 
-    /**
-     * 未登录，shiro应重定向到登录界面，此处返回未登录状态信息由前端控制跳转页面
-     * @return
-     */
-    @RequestMapping(value = "/permission/unAuth")
-    @ResponseBody
-    public Object unauth() {
-        throw new BusinessException("unAuth","token认证失败,请重新登录。");
+
+    @RequestMapping(value = "/permission/apiLogin", method = RequestMethod.POST)
+    public BaseResult<String> apiLogin(@Valid @RequestBody SysUserLoginParam sysUserLoginParam)throws Exception {
+        log.info("开始用户API接口登录:{}", sysUserLoginParam);
+        String jwtToken = sysUserService.apiLogin(sysUserLoginParam);
+        log.info("结束用户API接口登录:{}", jwtToken);
+        return fillSuccesData(jwtToken);
+
     }
 
     @RequiresPermissions(value={"1","2"},logical = Logical.OR)
@@ -69,14 +69,6 @@ public class SysUserController {
             e.printStackTrace();
             return ResultUtil.error();
         }*/
-    }
-    @RequestMapping(value = "/permission/apiLogin", method = RequestMethod.POST)
-    public BaseResult<String> apiLogin(@Valid @RequestBody SysUserLoginParam sysUserLoginParam)throws Exception {
-        log.info("开始用户API接口登录:{}", sysUserLoginParam);
-        String jwtToken = sysUserService.apiLogin(sysUserLoginParam);
-        log.info("结束用户API接口登录:{}", jwtToken);
-        return fillSuccesData(jwtToken);
-
     }
 
     @RequestMapping(value = "/permission/mqtest", method = RequestMethod.GET)
