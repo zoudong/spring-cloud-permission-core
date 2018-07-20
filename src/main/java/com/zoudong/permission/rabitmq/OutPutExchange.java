@@ -1,4 +1,4 @@
-package com.zoudong.permission.rabitmq.test;
+package com.zoudong.permission.rabitmq;
 
 import com.zoudong.permission.constant.MQConstant;
 import org.springframework.cloud.stream.annotation.Output;

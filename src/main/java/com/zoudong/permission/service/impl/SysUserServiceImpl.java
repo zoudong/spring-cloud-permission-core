@@ -199,5 +199,26 @@ public class SysUserServiceImpl implements SysUserService {
     }
 
 
+    /**
+     * 注销用户
+     * @param token
+     * @return
+     * @throws Exception
+     */
+    public boolean loginOut(String token) throws Exception {
+        if(StringUtils.isEmpty(token)){
+            throw new BusinessException("token_error","token不能为空");
+        }
+        if(redisUtils.get(PermissionCoreConstant.permission_token+token)!=null){
+            redisUtils.remove(PermissionCoreConstant.permission_token+token);
+            return true;
+        }else{
+            throw new BusinessException("token_error","查询用户token失败");
+        }
+    }
+
+
+
+
 
 }

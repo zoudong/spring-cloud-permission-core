@@ -1,11 +1,10 @@
-package com.zoudong.permission.rabitmq.test;
+package com.zoudong.permission.rabitmq;
 
 import com.zoudong.permission.exception.BusinessException;
 import com.zoudong.permission.model.SysUser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.support.MessageBuilder;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 /**

@@ -11,9 +11,20 @@ import com.zoudong.permission.param.user.query.QuerySysUserParam;
  * @date 2018/6/15 17:40
  */
 public interface SysUserService {
-
+    /**
+     * 登录
+     * @param sysUserLoginParam
+     * @return
+     * @throws Exception
+     */
     String apiLogin(SysUserLoginParam sysUserLoginParam) throws Exception;
 
+    /**
+     * 分页查询所有用户
+     * @param querySysUserParam
+     * @return
+     * @throws Exception
+     */
     PageInfo<SysUser> queryAllSysUser(QuerySysUserParam querySysUserParam) throws Exception;
 
 }
