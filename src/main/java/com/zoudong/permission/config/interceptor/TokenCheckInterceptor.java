@@ -19,7 +19,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.annotation.Annotation;
 
-
+/**
+ *
+ * 核心权限检查
+ * 需要权限所有请求都要从redis缓存里面取出来确认一下是否拥有访问权限
+ */
 public class TokenCheckInterceptor implements HandlerInterceptor {
 
     @Override
@@ -29,10 +33,6 @@ public class TokenCheckInterceptor implements HandlerInterceptor {
         if (requiresPermissions == null) {
             return true;
         }
-        //之后搞成一个通配列表(不需要，权限判断由注解按需取用)
-        /**if(httpServletRequest.getServletPath()=="/permission/apiLogin"){
-         return true;
-         }**/
         String token = httpServletRequest.getHeader("Authorization");
         if (!StringUtils.isBlank(token)) {
             //把token放入本地线程变量要用的时候方便
@@ -41,7 +41,6 @@ public class TokenCheckInterceptor implements HandlerInterceptor {
             SysUser superUserInfo = (SysUser) redisUtils.get(PermissionCoreConstant.permission_token + token);
             if (superUserInfo == null) {
                 throw new BusinessException("token_error", "认证token无效,请重新登录后重试！");
-                //return false;
             }
             //把userinfo放入本地线程变量要用的时候方便
             PermissionThreadLocal.userThreadLocal.set(superUserInfo);
@@ -58,7 +57,6 @@ public class TokenCheckInterceptor implements HandlerInterceptor {
                     }
                     if (isPerm != true) {
                         throw new BusinessException("token_error", "认证token权限不够,请重新配置后重试！");
-                        //return false;
                     }
 
                 }
@@ -71,11 +69,10 @@ public class TokenCheckInterceptor implements HandlerInterceptor {
                         }
                     }
                 }
+                throw new BusinessException("token_error", "认证token权限不够,请重新配置后重试！");
             }
             throw new BusinessException("token_error", "恭喜你绕过了所有安全机制,但还是token无效！");
-            //return false;
         } else {
-
             return true;
         }
     }
