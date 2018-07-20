@@ -59,6 +59,7 @@ public class JwtUtil {
         return builder.compact();
     }
 
+
     /**
      * 解密jwt
      *
@@ -66,24 +67,17 @@ public class JwtUtil {
      * @return
      * @throws Exception
      */
-    public Claims parseJWT(String jwt) throws Exception {
-        SecretKey key = generalKey();
-        Claims claims = Jwts.parser()
-                .setSigningKey(key)
-                .parseClaimsJws(jwt).getBody();
-        return claims;
-    }
-
-
-    public static String paseJwt(ServletRequest servletRequest, ServletResponse servletResponse)throws Exception {
-        String jwt=(String)servletRequest.getAttribute(AUTHORIZATION);
-        String account = null;
+    public static JSONObject paseJwt(String jwt)throws Exception {
         try {
             Claims claims = Jwts.parser()
                     .setSigningKey(DatatypeConverter.parseBase64Binary(JwtConstant.JWT_SECRET))
                     .parseClaimsJws(jwt)
                     .getBody();
-            account= JSONObject.parseObject(claims.getSubject()).getString("account");// 用户名
+            JSONObject jsonObject= JSONObject.parseObject(claims.getSubject());
+            if(jsonObject==null){
+                throw new BusinessException("token_pase_error","JWT 载荷信息为空,无意义的token");
+            }
+            return jsonObject;
         } catch (ExpiredJwtException e) {
             throw new BusinessException("token_pase_error","JWT 令牌过期:" + e.getMessage());
         } catch (UnsupportedJwtException e) {
@@ -97,8 +91,6 @@ public class JwtUtil {
         } catch (Exception e) {
             throw new BusinessException("JWT 令牌错误:" + e.getMessage());
         }
-
-        return jwt;
     }
 
 
