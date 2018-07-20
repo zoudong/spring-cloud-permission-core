@@ -1,4 +1,4 @@
-package com.zoudong.permission.controller;
+package com.zoudong.permission.controller.user;
 
 import com.github.pagehelper.PageInfo;
 import com.zoudong.permission.annotation.RequiresPermissions;
@@ -11,7 +11,7 @@ import com.zoudong.permission.rabitmq.SendMessageProcess;
 import com.zoudong.permission.result.base.BaseResult;
 import com.zoudong.permission.result.base.ResultUtil;
 import com.zoudong.permission.result.user.SysUserVO;
-import com.zoudong.permission.service.api.SysUserService;
+import com.zoudong.permission.service.api.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +29,9 @@ import static com.zoudong.permission.result.base.ResultUtil.fillSuccesData;
  */
 @Slf4j
 @RestController
-public class SysUserController {
+public class UserController {
     @Autowired
-    private SysUserService sysUserService;
+    private UserService sysUserService;
 
     @Autowired
     private SysResourceMapper sysResourceMapper;

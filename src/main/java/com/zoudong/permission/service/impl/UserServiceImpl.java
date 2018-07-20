@@ -10,7 +10,7 @@ import com.zoudong.permission.mapper.*;
 import com.zoudong.permission.model.*;
 import com.zoudong.permission.param.user.login.SysUserLoginParam;
 import com.zoudong.permission.param.user.query.QuerySysUserParam;
-import com.zoudong.permission.service.api.SysUserService;
+import com.zoudong.permission.service.api.UserService;
 import com.zoudong.permission.utils.RedisUtils;
 import com.zoudong.permission.utils.jwt.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +29,7 @@ import java.util.List;
  */
 @Slf4j
 @Service
-public class SysUserServiceImpl implements SysUserService {
+public class UserServiceImpl implements UserService {
 
     @Autowired
     private JwtUtil jwtUtil;
@@ -200,7 +200,7 @@ public class SysUserServiceImpl implements SysUserService {
 
 
     /**
-     * 注销用户
+     * 注销用户(后面加个认证注解登录后的才有权注销)
      * @param token
      * @return
      * @throws Exception

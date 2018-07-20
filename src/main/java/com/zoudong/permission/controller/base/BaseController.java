@@ -1,4 +1,4 @@
-package com.zoudong.permission.controller;
+package com.zoudong.permission.controller.base;
 
 /**
  * @author zd

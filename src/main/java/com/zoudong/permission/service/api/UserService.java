@@ -10,7 +10,7 @@ import com.zoudong.permission.param.user.query.QuerySysUserParam;
  * @description class
  * @date 2018/6/15 17:40
  */
-public interface SysUserService {
+public interface UserService {
     /**
      * 登录
      * @param sysUserLoginParam
