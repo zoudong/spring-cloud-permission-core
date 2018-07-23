@@ -11,7 +11,7 @@
  Target Server Version : 50720
  File Encoding         : 65001
 
- Date: 23/07/2018 11:22:05
+ Date: 23/07/2018 18:00:18
 */
 
 SET NAMES utf8mb4;
@@ -45,7 +45,7 @@ CREATE TABLE `sys_menu`  (
   `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '菜单名称',
   `icon` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '菜单图标',
   `url` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'url地址',
-  `permission_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '资源所需权限编码(挂靠的权限单选)',
+  `permission_id` bigint(255) NOT NULL COMMENT '资源所需权限编码(挂靠的权限单选)',
   `num` int(65) NULL DEFAULT NULL COMMENT '菜单排序号',
   `levels` int(65) NULL DEFAULT NULL COMMENT '菜单层级',
   `ismenu` int(11) NULL DEFAULT NULL COMMENT '是否是菜单（1：是  0：不是）',

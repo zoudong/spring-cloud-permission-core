@@ -1,7 +1,7 @@
 package com.zoudong.permission.model;
 
-import java.util.Date;
 import javax.persistence.*;
+import java.util.Date;
 
 @Table(name = "sys_role_permission")
 public class SysRolePermission {

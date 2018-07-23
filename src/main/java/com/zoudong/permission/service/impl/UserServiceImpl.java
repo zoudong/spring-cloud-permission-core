@@ -18,8 +18,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
-
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -41,19 +41,21 @@ public class UserServiceImpl implements UserService {
     private SysUserMapper sysUserMapper;
 
     @Autowired
-    private SysRoleMapper sysRoleMapper;
-
-    @Autowired
     private SysUserRoleMapper sysUserRoleMapper;
 
     @Autowired
     private SysRolePermissionMapper sysRolePermissionMapper;
 
     @Autowired
+    private SysMenuMapper sysMenuMapper;
+
+    @Autowired
     private SysPermissionMapper sysPermissionMapper;
 
     @Autowired
-    private SysMenuMapper sysMenuMapper;
+    private SysRoleMapper sysRoleMapper;
+
+
 
     /**
      * 无状态登录
@@ -264,5 +266,87 @@ public class UserServiceImpl implements UserService {
         }
         return permSysMenus;
     }
+
+
+    /**
+     * 添加权限
+     * @param sysPermission
+     * @throws Exception
+     */
+    public void addPermission(SysPermission sysPermission) throws Exception {
+        sysPermission.setId(null);
+        sysPermission.setVersion(0L);
+        sysPermission.setCreateTime(new Date());
+        int result=sysPermissionMapper.insert(sysPermission);
+        if(result!=1){
+            throw new BusinessException("add_permission_error","添加权限失败,受影响行数为0!");
+        }
+    }
+    /**
+     * 添加角色
+     * @param sysRole
+     * @throws Exception
+     */
+    public void addRole(SysRole sysRole) throws Exception {
+        sysRole.setId(null);
+        sysRole.setVersion(0L);
+        sysRole.setCreateTime(new Date());
+        int result=sysRoleMapper.insert(sysRole);
+        if(result!=1){
+            throw new BusinessException("add_role_error","添加角色失败,受影响行数为0!");
+        }
+    }
+
+    /**
+     * 为角色分配权限（1个角色可同时分配多个权限）
+     * @param roleId
+     * @param permissionIds
+     * @throws Exception
+     */
+    public void addSysRolePermission(Long roleId,List<Long> permissionIds) throws Exception {
+        List<SysRolePermission> sysRolePermissions=new ArrayList<SysRolePermission>();
+        for(Long permissionId:permissionIds){
+            SysRolePermission sysRolePermission=new SysRolePermission();
+            sysRolePermission.setRoleId(roleId);
+            sysRolePermission.setPermissionId(permissionId);
+            sysRolePermission.setCreateTime(new Date());
+            sysRolePermission.setVersion(0L);
+            sysRolePermissions.add(sysRolePermission);
+        }
+        int result=sysRolePermissionMapper.insertList(sysRolePermissions);
+        if(result!=sysRolePermissions.size()){
+            throw new BusinessException("add_role_error","添加角色权限关联失败,受影响行数为0!");
+        }
+    }
+
+    /***
+     * 新增菜单
+     * @param sysMenu
+     * @throws Exception
+     */
+    public void addSysMenu(SysMenu sysMenu) throws Exception {
+        sysMenu.setId(null);
+        sysMenu.setVersion(0L);
+        sysMenu.setCreateTime(new Date());
+        int result=sysMenuMapper.insert(sysMenu);
+        if(result!=1){
+            throw new BusinessException("add_role_error","添加菜单失败,受影响行数为0!");
+        }
+    }
+
+    /***
+     * 为菜单挂靠需要的权限（只有菜单才需要挂靠权限,不是每一个权限都要挂靠到菜单）(需要什么权限能展示这个菜单，与菜单内容的权限信息要一致)
+     * @throws Exception
+     */
+    public void addSysMenuPermission(Long menuId,String permissionId) throws Exception {
+        SysMenu sysMenu=new SysMenu();
+        sysMenu.setId(menuId);
+        sysMenu.setPermissionCode(permissionId);
+        int result=sysMenuMapper.updateByPrimaryKeySelective(sysMenu);
+        if(result!=1){
+            throw new BusinessException("add_role_error","为菜单挂靠关联权限失败,受影响行数为0!");
+        }
+    }
+
 
 }
