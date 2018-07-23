@@ -7,4 +7,5 @@ package com.zoudong.permission.constant;
  */
 public class PermissionCoreConstant {
     public static String permission_token="permission_token_";
+    public static String permission_menu="permission_menu";
 }

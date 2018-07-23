@@ -1,6 +1,7 @@
 package com.zoudong.permission.model;
 
 import java.util.Date;
+import java.util.List;
 import javax.persistence.*;
 
 @Table(name = "sys_menu")
@@ -14,17 +15,7 @@ public class SysMenu {
     /**
      * 菜单编号
      */
-    private String code;
-
-    /**
-     * 菜单父编号
-     */
-    private String pcode;
-
-    /**
-     * 当前菜单的所有父菜单编号
-     */
-    private String pcodes;
+    private String pid;
 
     /**
      * 菜单名称
@@ -95,6 +86,11 @@ public class SysMenu {
     private Date updateTime;
 
     /**
+     * 菜单编码(方便运维定位哪个菜单)
+     */
+    private String code;
+
+    /**
      * 获取主键id
      *
      * @return id - 主键id
@@ -115,55 +111,19 @@ public class SysMenu {
     /**
      * 获取菜单编号
      *
-     * @return code - 菜单编号
+     * @return pid - 菜单编号
      */
-    public String getCode() {
-        return code;
+    public String getPid() {
+        return pid;
     }
 
     /**
      * 设置菜单编号
      *
-     * @param code 菜单编号
+     * @param pid 菜单编号
      */
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    /**
-     * 获取菜单父编号
-     *
-     * @return pcode - 菜单父编号
-     */
-    public String getPcode() {
-        return pcode;
-    }
-
-    /**
-     * 设置菜单父编号
-     *
-     * @param pcode 菜单父编号
-     */
-    public void setPcode(String pcode) {
-        this.pcode = pcode;
-    }
-
-    /**
-     * 获取当前菜单的所有父菜单编号
-     *
-     * @return pcodes - 当前菜单的所有父菜单编号
-     */
-    public String getPcodes() {
-        return pcodes;
-    }
-
-    /**
-     * 设置当前菜单的所有父菜单编号
-     *
-     * @param pcodes 当前菜单的所有父菜单编号
-     */
-    public void setPcodes(String pcodes) {
-        this.pcodes = pcodes;
+    public void setPid(String pid) {
+        this.pid = pid;
     }
 
     /**
@@ -399,4 +359,26 @@ public class SysMenu {
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
+
+    /**
+     * 获取菜单编码(方便运维定位哪个菜单)
+     *
+     * @return code - 菜单编码(方便运维定位哪个菜单)
+     */
+    public String getCode() {
+        return code;
+    }
+
+    /**
+     * 设置菜单编码(方便运维定位哪个菜单)
+     *
+     * @param code 菜单编码(方便运维定位哪个菜单)
+     */
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+   /* @Transient
+    List<SysMenu> children;*/
+
 }

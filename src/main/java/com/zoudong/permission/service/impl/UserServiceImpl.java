@@ -52,6 +52,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private SysPermissionMapper sysPermissionMapper;
 
+    @Autowired
+    private SysMenuMapper sysMenuMapper;
+
     /**
      * 无状态登录
      * @param sysUserLoginParam
@@ -217,8 +220,49 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-
-
-
+    /**
+     * 菜单缓存起来(增加菜单信息后更新菜单信息缓存)
+     * @return
+     * @throws Exception
+     */
+    public void cacheSysMenu() throws Exception {
+        List<SysMenu> permSysMenus=new ArrayList<>();
+        if(!permSysMenus.isEmpty()){
+            List<SysMenu> sysMenus=sysMenuMapper.selectAll();
+            redisUtils.set(PermissionCoreConstant.permission_menu,sysMenus);
+        }else{
+            throw new BusinessException("cacheMenu_error","查询系统菜失败");
+        }
+    }
+    /**
+     * 根据不同的token的权限从缓存里面加载不同的菜单
+     * @param token
+     * @return
+     * @throws Exception
+     */
+    public List<SysMenu> queryAdminMenu(String token) throws Exception {
+        if(StringUtils.isEmpty(token)){
+            throw new BusinessException("token_error","token不能为空");
+        }
+        List<SysMenu> permSysMenus=new ArrayList<>();
+        if(redisUtils.get(PermissionCoreConstant.permission_token+token)==null){
+            throw new BusinessException("token_error","token已经被注销请重新登录");
+        }
+        SysUser sysUser= (SysUser) redisUtils.get(PermissionCoreConstant.permission_token+token);
+        List<SysPermission> userSysPermissions=sysUser.getPermissionList();
+        if(redisUtils.get(PermissionCoreConstant.permission_menu)!=null){
+            List<SysMenu> sysMenus= (List<SysMenu>)redisUtils.get(PermissionCoreConstant.permission_menu);
+            for(SysMenu sysMenu:sysMenus){
+                for(SysPermission sysPermission:userSysPermissions){
+                    if(sysMenu.getPermissionCode().equals(sysPermission.getPermissionCode())){
+                        permSysMenus.add(sysMenu);
+                    }
+                }
+            }
+        }else{
+            throw new BusinessException("token_error","查询用户token失败");
+        }
+        return permSysMenus;
+    }
 
 }
