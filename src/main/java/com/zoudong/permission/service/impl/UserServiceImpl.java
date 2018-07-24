@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 import java.util.ArrayList;
 import java.util.Date;
@@ -54,6 +55,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private SysRoleMapper sysRoleMapper;
+
+    @Autowired
+    private SysDeptMapper sysDeptMapper;
 
 
 
@@ -345,6 +349,112 @@ public class UserServiceImpl implements UserService {
         int result=sysMenuMapper.updateByPrimaryKeySelective(sysMenu);
         if(result!=1){
             throw new BusinessException("add_role_error","为菜单挂靠关联权限失败,受影响行数为0!");
+        }
+    }
+
+    /***
+     * 新增系统后台管理用户(非前台用户注册)
+     * @throws Exception
+     */
+    public void addSysUser(SysUser sysUser) throws Exception {
+        addUserParmCheck(sysUser);
+        sysUser.setId(null);
+        int result=sysUserMapper.insertSelective(sysUser);
+        if(result!=1){
+            throw new BusinessException("add_user_error","新增用户失败,受影响行数为0!");
+        }
+    }
+
+    private void addUserParmCheck(SysUser sysUser) {
+        if(StringUtils.isEmpty(sysUser.getAccount())){
+            throw new BusinessException("add_user_error","新增用户失败,账户名不能为空!");
+        }
+        Example accountExample=new Example(SysUser.class);
+        accountExample.createCriteria().andEqualTo("account",sysUser.getAccount());
+        List<SysUser> accountUserResult=sysUserMapper.selectByExample(accountExample);
+        if(!accountUserResult.isEmpty()){
+            throw new BusinessException("add_user_error","新增用户失败,账户已存在，请更换名称!");
+        }
+
+        if(StringUtils.isEmpty(sysUser.getPassword())){
+            throw new BusinessException("add_user_error","新增用户失败,密码不能为空!");
+        }
+        if(StringUtils.isEmpty(sysUser.getPhone())){
+            throw new BusinessException("add_user_error","新增用户失败,手机号码不能为空!");
+        }
+        Example phoneExample=new Example(SysUser.class);
+        phoneExample.createCriteria().andEqualTo("phone",sysUser.getPhone());
+        List<SysUser> phoneUserResult=sysUserMapper.selectByExample(phoneExample);
+        if(!phoneUserResult.isEmpty()){
+            throw new BusinessException("add_user_error","新增用户失败,手机号码已存在，请更换手机号码!");
+        }
+        if(StringUtils.isEmpty(sysUser.getEmail())){
+            throw new BusinessException("add_user_error","新增用户失败,邮箱地址不能为空!");
+        }
+        Example emailExample=new Example(SysUser.class);
+        phoneExample.createCriteria().andEqualTo("email",sysUser.getPhone());
+        List<SysUser> emailUserResult=sysUserMapper.selectByExample(emailExample);
+        if(!emailUserResult.isEmpty()){
+            throw new BusinessException("add_user_error","新增用户失败,邮箱已存在，请更换邮箱帐号!");
+        }
+    }
+
+
+    /***
+     * 为用户选择组织
+     * @throws Exception
+     */
+    public void userAddDept(List<Long> userIds,Long deptId) throws Exception {
+        SysUser sysUser=new SysUser();
+        sysUser.setDeptId(deptId);
+
+        Example example=new Example(SysUser.class);
+        example.createCriteria().andIn("id",userIds);
+
+        int result=sysUserMapper.updateByExampleSelective(sysUser,example);
+
+        if(result!=userIds.size()){
+            throw new BusinessException("user_add_dept_error","为用户选择组织失败,受影响行数与要挂靠组织的用户数量不一致!");
+        }
+    }
+
+
+    /***
+     * 新建组织
+     * @throws Exception
+     */
+    public void addSysDept(SysDept sysDept) throws Exception {
+
+        addSysDeptParamCheck(sysDept);
+
+        int result=sysDeptMapper.insertSelective(sysDept);
+        if(result!=1){
+            throw new BusinessException("add_sys_dept_error","新建组织失败,受影响行数不一致!");
+        }
+    }
+
+    private void addSysDeptParamCheck(SysDept sysDept) {
+        if(StringUtils.isEmpty(sysDept.getFullname())){
+            throw new BusinessException("add_sys_dept_error","新建组织部门全称不能为空!");
+        }
+
+        Example fullnameExample=new Example(SysUser.class);
+        fullnameExample.createCriteria().andEqualTo("fullname",sysDept.getFullname());
+        List<SysDept> fullnameDeptResult=sysDeptMapper.selectByExample(fullnameExample);
+        if(!fullnameDeptResult.isEmpty()){
+            throw new BusinessException("add_sys_dept_error","新建组织失败,组织全称已存在，请更换名称!");
+        }
+
+
+        if(StringUtils.isEmpty(sysDept.getSimplename())){
+            throw new BusinessException("add_sys_dept_error","新建组织部门简称称不能为空!");
+        }
+
+        Example simplenameExample=new Example(SysUser.class);
+        simplenameExample.createCriteria().andEqualTo("simplename",sysDept.getSimplename());
+        List<SysDept> simplenameDeptResult=sysDeptMapper.selectByExample(simplenameExample);
+        if(!simplenameDeptResult.isEmpty()){
+            throw new BusinessException("add_sys_dept_error","新建组织失败,组织简称已存在，请更换名称!");
         }
     }
 
