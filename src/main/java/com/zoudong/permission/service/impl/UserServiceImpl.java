@@ -355,6 +355,12 @@ public class UserServiceImpl implements UserService {
      */
     @Transactional
     public void addSysRolePermission(Long roleId,List<Long> permissionIds) throws Exception {
+
+        //先移除再分配
+        Example example=new Example(SysRolePermission.class);
+        example.createCriteria().andEqualTo("roleId",roleId);
+        sysRolePermissionMapper.deleteByExample(example);
+
         List<SysRolePermission> sysRolePermissions=new ArrayList<SysRolePermission>();
         for(Long permissionId:permissionIds){
             SysRolePermission sysRolePermission=new SysRolePermission();
@@ -364,6 +370,7 @@ public class UserServiceImpl implements UserService {
             sysRolePermission.setVersion(0L);
             sysRolePermissions.add(sysRolePermission);
         }
+
         int result=sysRolePermissionMapper.insertList(sysRolePermissions);
         if(result!=sysRolePermissions.size()){
             throw new BusinessException("add_role_error","添加角色权限关联失败,受影响行数为0!");
@@ -420,6 +427,12 @@ public class UserServiceImpl implements UserService {
      */
     @Transactional
     public void addSysUserRole(Long userId,List<Long> roleIds) throws Exception {
+
+        //先移除再分配
+        Example example=new Example(SysUserRole.class);
+        example.createCriteria().andEqualTo("userId",userId);
+        sysUserRoleMapper.deleteByExample(example);
+
         List<SysUserRole> sysUserRoles=new ArrayList<SysUserRole>();
         for(Long roleId:roleIds){
             SysUserRole sysUserRole=new SysUserRole();
@@ -429,6 +442,7 @@ public class UserServiceImpl implements UserService {
             sysUserRole.setVersion(0L);
             sysUserRoles.add(sysUserRole);
         }
+
         int result=sysUserRoleMapper.insertList(sysUserRoles);
         if(result!=sysUserRoles.size()){
             throw new BusinessException("add_user_role_error","添加用户角色关联失败,受影响行数不对称!");
