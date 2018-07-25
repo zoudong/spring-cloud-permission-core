@@ -1,12 +1,12 @@
-package com.zoudong.permission.controller.user;
+package com.zoudong.permission.controller.admin;
 
 import com.github.pagehelper.PageInfo;
 import com.zoudong.permission.annotation.RequiresPermissions;
 import com.zoudong.permission.constant.Logical;
 import com.zoudong.permission.mapper.SysResourceMapper;
 import com.zoudong.permission.model.SysUser;
-import com.zoudong.permission.param.user.login.SysUserLoginParam;
-import com.zoudong.permission.param.user.query.QuerySysUserParam;
+import com.zoudong.permission.param.login.SysUserLoginParam;
+import com.zoudong.permission.param.user.QuerySysUserParam;
 import com.zoudong.permission.rabitmq.SendMessageProcess;
 import com.zoudong.permission.result.base.BaseResult;
 import com.zoudong.permission.result.base.ResultUtil;
@@ -29,7 +29,7 @@ import static com.zoudong.permission.result.base.ResultUtil.fillSuccesData;
  */
 @Slf4j
 @RestController
-public class UserController {
+public class AdminController {
     @Autowired
     private UserService sysUserService;
 

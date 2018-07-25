@@ -1,4 +1,4 @@
-package com.zoudong.permission.task;
+package com.zoudong.permission.task.demo;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.EnableScheduling;
