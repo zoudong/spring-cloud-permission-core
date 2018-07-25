@@ -83,8 +83,8 @@ public class UserServiceImpl implements UserService {
             throw new BusinessException("login_error","获取用户信息失败");
         }
         if (userInfo.getStatus() == 1) {
-            log.info("账户冻结！");
-            throw new BusinessException("login_error_freeze","账户冻结!");
+            log.info("账户被冻结！");
+            throw new BusinessException("login_error_freeze","账户被冻结!");
         }
         if(!sysUserLoginParam.getPassword().equals(userInfo.getPassword())){
             throw new BusinessException("login_error","用户名或密码不正确！");
@@ -240,6 +240,7 @@ public class UserServiceImpl implements UserService {
             throw new BusinessException("cacheMenu_error","查询系统菜失败");
         }
     }
+
     /**
      * 根据不同的token的权限从缓存里面加载不同的菜单
      * @param token
@@ -286,6 +287,29 @@ public class UserServiceImpl implements UserService {
             throw new BusinessException("add_permission_error","添加权限失败,受影响行数为0!");
         }
     }
+
+    /**
+     * 删除权限(一般不使用)
+     * @param ids
+     * @throws Exception
+     */
+    @Transactional
+    public void deletePermissions(List<Long> ids) throws Exception {
+        Example example=new Example(SysRolePermission.class);
+        example.createCriteria().andIn("permissionId",ids);
+        List<SysRolePermission> permissions=sysRolePermissionMapper.selectByExample(example);
+        if(permissions.size()!=0){
+            log.info("有权限正在被角色使用",permissions);
+            throw new BusinessException("delete_permissions_error","删除权限失败,有权限正在被角色使用!");
+        }
+        Example permiissionExample=new Example(SysPermission.class);
+        permiissionExample.createCriteria().andIn("permissionId",ids);
+        int result=sysPermissionMapper.deleteByExample(permiissionExample);
+        if(result!=ids.size()){
+            throw new BusinessException("delete_permissions_error","删除权限失败,受影响行数不对称!");
+        }
+    }
+
     /**
      * 添加角色
      * @param sysRole
@@ -302,11 +326,34 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
+     * 删除角色
+     * @param ids
+     * @throws Exception
+     */
+    @Transactional
+    public void deleteRoles(List<Long> ids) throws Exception {
+        Example example=new Example(SysUserRole.class);
+        example.createCriteria().andIn("roleId",ids);
+        List<SysUserRole> sysUserRoles=sysUserRoleMapper.selectByExample(example);
+        if(sysUserRoles.size()!=0){
+            log.info("有角色正在被用户使用",sysUserRoles);
+            throw new BusinessException("delete_permission_error","删除角色失败,有角色正在被用户使用!");
+        }
+        Example roleExample=new Example(SysPermission.class);
+        roleExample.createCriteria().andIn("roleId",ids);
+        int result=sysRoleMapper.deleteByExample(roleExample);
+        if(result!=ids.size()){
+            throw new BusinessException("delete_roles_error","删除权限失败,受影响行数与入参不对称!");
+        }
+    }
+
+    /**
      * 为角色分配权限（1个角色可同时分配多个权限）
      * @param roleId
      * @param permissionIds
      * @throws Exception
      */
+    @Transactional
     public void addSysRolePermission(Long roleId,List<Long> permissionIds) throws Exception {
         List<SysRolePermission> sysRolePermissions=new ArrayList<SysRolePermission>();
         for(Long permissionId:permissionIds){
@@ -365,7 +412,32 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    private void addUserParmCheck(SysUser sysUser) {
+    /**
+     * 为用户分配角色（1个用户可同时拥有多个角色）
+     * @param userId
+     * @param roleIds
+     * @throws Exception
+     */
+    @Transactional
+    public void addSysUserRole(Long userId,List<Long> roleIds) throws Exception {
+        List<SysUserRole> sysUserRoles=new ArrayList<SysUserRole>();
+        for(Long roleId:roleIds){
+            SysUserRole sysUserRole=new SysUserRole();
+            sysUserRole.setUserId(userId);
+            sysUserRole.setRoleId(roleId);
+            sysUserRole.setCreateTime(new Date());
+            sysUserRole.setVersion(0L);
+            sysUserRoles.add(sysUserRole);
+        }
+        int result=sysUserRoleMapper.insertList(sysUserRoles);
+        if(result!=sysUserRoles.size()){
+            throw new BusinessException("add_user_role_error","添加用户角色关联失败,受影响行数不对称!");
+        }
+    }
+
+
+
+    private void addUserParmCheck(SysUser sysUser) throws Exception{
         if(StringUtils.isEmpty(sysUser.getAccount())){
             throw new BusinessException("add_user_error","新增用户失败,账户名不能为空!");
         }
@@ -404,6 +476,7 @@ public class UserServiceImpl implements UserService {
      * 为用户选择组织
      * @throws Exception
      */
+    @Transactional
     public void userAddDept(List<Long> userIds,Long deptId) throws Exception {
         SysUser sysUser=new SysUser();
         sysUser.setDeptId(deptId);
@@ -433,7 +506,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    private void addSysDeptParamCheck(SysDept sysDept) {
+    private void addSysDeptParamCheck(SysDept sysDept) throws Exception{
         if(StringUtils.isEmpty(sysDept.getFullname())){
             throw new BusinessException("add_sys_dept_error","新建组织部门全称不能为空!");
         }
