@@ -176,11 +176,6 @@ public class UserServiceImpl implements UserService {
     }
 
 
-
-
-
-
-
     /**
      * 通过某个属性去重复对象
      *
@@ -198,14 +193,6 @@ public class UserServiceImpl implements UserService {
         return list;
     }
 
-
-    @Override
-    public PageInfo<SysUser> queryAllSysUser(QuerySysUserParam querySysUserParam) throws Exception {
-        PageHelper.startPage(querySysUserParam.getPageNum(), querySysUserParam.getPageSize());
-        List<SysUser> sysUserList = sysUserMapper.selectAll();
-        PageInfo<SysUser> pageInfo = new PageInfo<>(sysUserList);
-        return pageInfo;
-    }
 
 
     /**
@@ -544,6 +531,50 @@ public class UserServiceImpl implements UserService {
             throw new BusinessException("add_sys_dept_error","新建组织失败,组织简称已存在，请更换名称!");
         }
     }
+
+
+    /**
+     * 按条件分页查询用户信息
+     * @param querySysUserParam
+     * @return
+     * @throws Exception
+     */
+    public PageInfo<SysUser> queryAllSysUser(QuerySysUserParam querySysUserParam) throws Exception {
+        PageHelper.startPage(querySysUserParam.getPageNum(), querySysUserParam.getPageSize());
+
+        Example example=new Example(SysUser.class);
+        Example.Criteria criteria=example.createCriteria();
+        if(StringUtils.isNotEmpty(querySysUserParam.getAccount())){
+            criteria.andEqualTo("account",querySysUserParam.getAccount());
+        }
+
+        if(null!=querySysUserParam.getId()){
+            criteria.andEqualTo("id",querySysUserParam.getId());
+        }
+
+        if(StringUtils.isNotEmpty(querySysUserParam.getEmail())){
+            criteria.andEqualTo("email",querySysUserParam.getEmail());
+        }
+
+        if(StringUtils.isNotEmpty(querySysUserParam.getPhone())){
+            criteria.andEqualTo("phone",querySysUserParam.getPhone());
+        }
+
+        if(StringUtils.isNotEmpty(querySysUserParam.getRealName())){
+            criteria.andEqualTo("realName",querySysUserParam.getRealName());
+        }
+
+        if(null!=querySysUserParam.getSex()){
+            criteria.andEqualTo("sex",querySysUserParam.getSex());
+        }
+
+        List<SysUser> sysUserList = sysUserMapper.selectByExample(example);
+        PageInfo<SysUser> pageInfo = new PageInfo<>(sysUserList);
+        return pageInfo;
+    }
+
+
+
 
 
 }

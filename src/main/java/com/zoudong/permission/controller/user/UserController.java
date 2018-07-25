@@ -39,7 +39,12 @@ public class UserController {
     @Autowired
     private SendMessageProcess sendMessageProcess;
 
-
+    /**
+     * api接口登录拿取token
+     * @param sysUserLoginParam
+     * @return
+     * @throws Exception
+     */
     @RequestMapping(value = "/permission/apiLogin", method = RequestMethod.POST)
     public BaseResult<String> apiLogin(@Valid @RequestBody SysUserLoginParam sysUserLoginParam)throws Exception {
         log.info("开始用户API接口登录:{}", sysUserLoginParam);
@@ -49,6 +54,14 @@ public class UserController {
 
     }
 
+    /**
+     * 按条件分页查询用户信息
+     * @param querySysUserParam
+     * @param request
+     * @param response
+     * @return
+     * @throws Exception
+     */
     @RequiresPermissions(value={"1","2"},logical = Logical.OR)
     @RequestMapping(value = "/permission/querySysUserByPage", method = RequestMethod.POST)
     public  BaseResult<PageInfo<SysUserVO>> test(@Valid @RequestBody QuerySysUserParam querySysUserParam, HttpServletRequest request, HttpServletResponse response)throws Exception {
