@@ -4,6 +4,8 @@ import com.github.pagehelper.PageInfo;
 import com.zoudong.permission.model.SysDept;
 import com.zoudong.permission.param.dept.SysDeptParam;
 
+import java.util.List;
+
 /**
  * @author zd
  * @description class
@@ -24,4 +26,13 @@ public interface DeptService {
      * @throws Exception
      */
     PageInfo<SysDept> querySysDepts(SysDeptParam sysDeptParam) throws Exception;
+
+    /**
+     * 批量删除组织信息
+     *
+     * @param deptIds
+     * @return
+     * @throws Exception
+     */
+    void deleteSysDepts(List<Long> deptIds) throws Exception;
 }

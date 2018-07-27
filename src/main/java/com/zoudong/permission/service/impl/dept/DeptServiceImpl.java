@@ -26,7 +26,8 @@ public class DeptServiceImpl implements DeptService {
 
     @Autowired
     private SysDeptMapper sysDeptMapper;
-
+    @Autowired
+    private SysUserMapper sysUserMapper;
 
     /***
      * 新建组织
@@ -70,6 +71,8 @@ public class DeptServiceImpl implements DeptService {
 
 
 
+
+
     /**
      * 按条件分页查询组织信息（用于后台组织管理时展示）
      *
@@ -81,7 +84,7 @@ public class DeptServiceImpl implements DeptService {
     public PageInfo<SysDept> querySysDepts(SysDeptParam sysDeptParam) throws Exception {
         PageHelper.startPage(sysDeptParam.getPageNum(), sysDeptParam.getPageSize());
 
-        Example example = new Example(SysPermission.class);
+        Example example = new Example(SysDept.class);
         Example.Criteria criteria = example.createCriteria();
         if (StringUtils.isNotEmpty(sysDeptParam.getFullname())) {
             criteria.andLike("fullname", sysDeptParam.getFullname());
@@ -103,6 +106,39 @@ public class DeptServiceImpl implements DeptService {
         PageInfo<SysDept> pageInfo = new PageInfo<SysDept>(sysDeptList);
         return pageInfo;
     }
+
+
+    /**
+     * 批量删除组织信息
+     *
+     * @param deptIds
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public void deleteSysDepts(List<Long> deptIds) throws Exception {
+
+        Example example = new Example(SysDept.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andIn("id",deptIds);
+        List<SysDept> list=sysDeptMapper.selectByExample(example);
+
+        //检查组织下面是否有用户
+        Example userExample=new Example(SysUser.class);
+        userExample.createCriteria().andIn("deptId",deptIds);
+        List<SysUser> sysUsers= sysUserMapper.selectByExample(userExample);
+        if(!sysUsers.isEmpty()){
+            log.info("删除失败有用户{}关联了这些组织{}",sysUsers,deptIds);
+            throw new BusinessException("delete_sys_depts_error","删除失败有用户关联了组织,请先解绑组织再删除组织{}");
+        }
+        int result=sysDeptMapper.deleteByExample(example);
+        if(result!=deptIds.size()){
+            log.info("删除失败删除结果与入参数据量不对称");
+            throw new BusinessException("delete_sys_depts_error","删除失败删除结果与入参数据量不对称{}");
+        }
+
+    }
+
 
 
 }
