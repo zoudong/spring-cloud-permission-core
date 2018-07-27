@@ -11,7 +11,7 @@ import com.zoudong.permission.rabitmq.SendMessageProcess;
 import com.zoudong.permission.result.base.BaseResult;
 import com.zoudong.permission.result.base.ResultUtil;
 import com.zoudong.permission.result.user.SysUserVO;
-import com.zoudong.permission.service.api.UserService;
+import com.zoudong.permission.service.api.user.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,7 @@ import static com.zoudong.permission.result.base.ResultUtil.fillSuccesData;
 @RestController
 public class AdminController {
     @Autowired
-    private UserService sysUserService;
+    private UserService userService;
 
     @Autowired
     private SysResourceMapper sysResourceMapper;
@@ -48,7 +48,7 @@ public class AdminController {
     @RequestMapping(value = "/permission/apiLogin", method = RequestMethod.POST)
     public BaseResult<String> apiLogin(@Valid @RequestBody SysUserLoginParam sysUserLoginParam)throws Exception {
         log.info("开始用户API接口登录:{}", sysUserLoginParam);
-        String jwtToken = sysUserService.apiLogin(sysUserLoginParam);
+        String jwtToken = userService.apiLogin(sysUserLoginParam);
         log.info("结束用户API接口登录:{}", jwtToken);
         return fillSuccesData(jwtToken);
 
@@ -67,7 +67,7 @@ public class AdminController {
     public  BaseResult<PageInfo<SysUserVO>> test(@Valid @RequestBody QuerySysUserParam querySysUserParam, HttpServletRequest request, HttpServletResponse response)throws Exception {
        /* try {*/
         log.info("开始分页查询全部用户:{}", querySysUserParam);
-        PageInfo<SysUser> pageInfo = sysUserService.queryAllSysUser(querySysUserParam);
+        PageInfo<SysUser> pageInfo = userService.queryAllSysUser(querySysUserParam);
         PageInfo<SysUserVO> pageInfoVO=new PageInfo<>();
         BeanUtils.copyProperties(pageInfo,pageInfoVO);
         log.info("结束分页查询全部用户:{}", pageInfoVO);
