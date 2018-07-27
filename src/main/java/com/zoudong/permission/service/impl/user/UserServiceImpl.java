@@ -10,7 +10,6 @@ import com.zoudong.permission.mapper.*;
 import com.zoudong.permission.model.*;
 import com.zoudong.permission.param.login.SysUserLoginParam;
 import com.zoudong.permission.param.user.QuerySysUserParam;
-import com.zoudong.permission.service.api.UserService;
 import com.zoudong.permission.utils.RedisUtils;
 import com.zoudong.permission.utils.jwt.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +30,7 @@ import java.util.List;
  */
 @Slf4j
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements com.zoudong.permission.service.api.user.UserService {
 
     @Autowired
     private JwtUtil jwtUtil;
@@ -177,30 +176,13 @@ public class UserServiceImpl implements UserService {
 
 
     /**
-     * 通过某个属性去重复对象
-     *
-     * @param list
-     * @return
-     */
-    public static List<SysPermission> removeDuplicate(List<SysPermission> list) {
-        for (int i = 0; i < list.size() - 1; i++) {
-            for (int j = list.size() - 1; j > i; j--) {
-                if (list.get(j).getPermissionCode().equals(list.get(i).getPermissionCode())) {
-                    list.remove(j);
-                }
-            }
-        }
-        return list;
-    }
-
-
-    /**
      * 注销用户(后面加个认证注解登录后的才有权注销)
      *
      * @param token
      * @return
      * @throws Exception
      */
+    @Override
     public boolean loginOut(String token) throws Exception {
         if (StringUtils.isEmpty(token)) {
             throw new BusinessException("token_error", "token不能为空");
@@ -218,6 +200,7 @@ public class UserServiceImpl implements UserService {
      * 新增系统后台管理用户(非前台用户注册)
      * @throws Exception
      */
+    @Override
     public void addSysUser(SysUser sysUser) throws Exception {
         addUserParmCheck(sysUser);
         sysUser.setId(null);
@@ -234,6 +217,7 @@ public class UserServiceImpl implements UserService {
      * @param roleIds
      * @throws Exception
      */
+    @Override
     @Transactional
     public void addSysUserRole(Long userId, List<Long> roleIds) throws Exception {
 
@@ -298,6 +282,7 @@ public class UserServiceImpl implements UserService {
      * 为用户选择组织
      * @throws Exception
      */
+    @Override
     @Transactional
     public void userAddDept(List<Long> userIds, Long deptId) throws Exception {
         SysUser sysUser = new SysUser();
@@ -320,6 +305,7 @@ public class UserServiceImpl implements UserService {
      * @return
      * @throws Exception
      */
+    @Override
     public PageInfo<SysUser> queryAllSysUser(QuerySysUserParam querySysUserParam) throws Exception {
         PageHelper.startPage(querySysUserParam.getPageNum(), querySysUserParam.getPageSize());
 
@@ -356,7 +342,22 @@ public class UserServiceImpl implements UserService {
 
 
 
-
+    /**
+     * 通过某个属性去重复对象
+     *
+     * @param list
+     * @return
+     */
+    static List<SysPermission> removeDuplicate(List<SysPermission> list) {
+        for (int i = 0; i < list.size() - 1; i++) {
+            for (int j = list.size() - 1; j > i; j--) {
+                if (list.get(j).getPermissionCode().equals(list.get(i).getPermissionCode())) {
+                    list.remove(j);
+                }
+            }
+        }
+        return list;
+    }
 
 
 

@@ -7,6 +7,7 @@ import com.zoudong.permission.exception.BusinessException;
 import com.zoudong.permission.mapper.*;
 import com.zoudong.permission.model.*;
 import com.zoudong.permission.param.menu.SysMenuParam;
+import com.zoudong.permission.service.api.menu.MenuService;
 import com.zoudong.permission.utils.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -24,7 +25,7 @@ import java.util.List;
  */
 @Slf4j
 @Service
-public class MenuServiceImpl{
+public class MenuServiceImpl implements MenuService {
 
     @Autowired
     private RedisUtils redisUtils;
@@ -38,6 +39,7 @@ public class MenuServiceImpl{
      * @return
      * @throws Exception
      */
+    @Override
     public void cacheSysMenu() throws Exception {
         List<SysMenu> permSysMenus = new ArrayList<>();
         if (!permSysMenus.isEmpty()) {
@@ -55,6 +57,7 @@ public class MenuServiceImpl{
      * @return
      * @throws Exception
      */
+    @Override
     public List<SysMenu> queryAdminMenu(String token) throws Exception {
         if (StringUtils.isEmpty(token)) {
             throw new BusinessException("token_error", "token不能为空");
@@ -86,6 +89,7 @@ public class MenuServiceImpl{
      * @param sysMenu
      * @throws Exception
      */
+    @Override
     public void addSysMenu(SysMenu sysMenu) throws Exception {
         sysMenu.setId(null);
         sysMenu.setVersion(0L);
@@ -100,6 +104,7 @@ public class MenuServiceImpl{
      * 为菜单挂靠需要的权限（只有菜单才需要挂靠权限,不是每一个权限都要挂靠到菜单）(需要什么权限能展示这个菜单，与菜单内容的权限信息要一致)
      * @throws Exception
      */
+    @Override
     public void addSysMenuPermission(Long menuId, String permissionId) throws Exception {
         SysMenu sysMenu = new SysMenu();
         sysMenu.setId(menuId);
@@ -118,6 +123,7 @@ public class MenuServiceImpl{
      * @return
      * @throws Exception
      */
+    @Override
     public PageInfo<SysMenu> querySysMenu(SysMenuParam sysMenuParam) throws Exception {
         PageHelper.startPage(sysMenuParam.getPageNum(), sysMenuParam.getPageSize());
 

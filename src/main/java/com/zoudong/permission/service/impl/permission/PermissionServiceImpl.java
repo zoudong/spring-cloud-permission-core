@@ -1,30 +1,18 @@
 package com.zoudong.permission.service.impl.permission;
 
-import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.zoudong.permission.constant.JwtConstant;
-import com.zoudong.permission.constant.PermissionCoreConstant;
 import com.zoudong.permission.exception.BusinessException;
 import com.zoudong.permission.mapper.*;
 import com.zoudong.permission.model.*;
-import com.zoudong.permission.param.dept.SysDeptParam;
-import com.zoudong.permission.param.login.SysUserLoginParam;
-import com.zoudong.permission.param.menu.SysMenuParam;
 import com.zoudong.permission.param.permission.QuerySysPermissionParam;
-import com.zoudong.permission.param.role.SysRoleParam;
-import com.zoudong.permission.param.user.QuerySysUserParam;
-import com.zoudong.permission.service.api.UserService;
-import com.zoudong.permission.utils.RedisUtils;
-import com.zoudong.permission.utils.jwt.JwtUtil;
+import com.zoudong.permission.service.api.permission.PermissionService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
-
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -35,7 +23,7 @@ import java.util.List;
  */
 @Slf4j
 @Service
-public class PermissionServiceImpl {
+public class PermissionServiceImpl implements PermissionService {
 
     @Autowired
     private SysRolePermissionMapper sysRolePermissionMapper;
@@ -50,6 +38,7 @@ public class PermissionServiceImpl {
      * @param sysPermission
      * @throws Exception
      */
+    @Override
     public void addPermission(SysPermission sysPermission) throws Exception {
         sysPermission.setId(null);
         sysPermission.setVersion(0L);
@@ -66,6 +55,7 @@ public class PermissionServiceImpl {
      * @param ids
      * @throws Exception
      */
+    @Override
     @Transactional
     public void deletePermissions(List<Long> ids) throws Exception {
         Example example = new Example(SysRolePermission.class);
@@ -91,6 +81,7 @@ public class PermissionServiceImpl {
      * @return
      * @throws Exception
      */
+    @Override
     public PageInfo<SysPermission> querySysPermissions(QuerySysPermissionParam querySysPermissionParam) throws Exception {
         PageHelper.startPage(querySysPermissionParam.getPageNum(), querySysPermissionParam.getPageSize());
 

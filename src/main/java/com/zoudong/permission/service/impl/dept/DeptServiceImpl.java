@@ -1,31 +1,18 @@
 package com.zoudong.permission.service.impl.dept;
 
-import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.zoudong.permission.constant.JwtConstant;
-import com.zoudong.permission.constant.PermissionCoreConstant;
 import com.zoudong.permission.exception.BusinessException;
 import com.zoudong.permission.mapper.*;
 import com.zoudong.permission.model.*;
 import com.zoudong.permission.param.dept.SysDeptParam;
-import com.zoudong.permission.param.login.SysUserLoginParam;
-import com.zoudong.permission.param.menu.SysMenuParam;
-import com.zoudong.permission.param.permission.QuerySysPermissionParam;
-import com.zoudong.permission.param.role.SysRoleParam;
-import com.zoudong.permission.param.user.QuerySysUserParam;
-import com.zoudong.permission.service.api.UserService;
-import com.zoudong.permission.utils.RedisUtils;
-import com.zoudong.permission.utils.jwt.JwtUtil;
+import com.zoudong.permission.service.api.dept.DeptService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -35,7 +22,7 @@ import java.util.List;
  */
 @Slf4j
 @Service
-public class DeptServiceImpl  {
+public class DeptServiceImpl implements DeptService {
 
     @Autowired
     private SysDeptMapper sysDeptMapper;
@@ -45,6 +32,7 @@ public class DeptServiceImpl  {
      * 新建组织
      * @throws Exception
      */
+    @Override
     public void addSysDept(SysDept sysDept) throws Exception {
 
         addSysDeptParamCheck(sysDept);
@@ -89,6 +77,7 @@ public class DeptServiceImpl  {
      * @return
      * @throws Exception
      */
+    @Override
     public PageInfo<SysDept> querySysDepts(SysDeptParam sysDeptParam) throws Exception {
         PageHelper.startPage(sysDeptParam.getPageNum(), sysDeptParam.getPageSize());
 
