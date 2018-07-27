@@ -3,7 +3,6 @@ package com.zoudong.permission.controller.admin;
 import com.github.pagehelper.PageInfo;
 import com.zoudong.permission.annotation.RequiresPermissions;
 import com.zoudong.permission.constant.Logical;
-import com.zoudong.permission.mapper.SysResourceMapper;
 import com.zoudong.permission.model.SysUser;
 import com.zoudong.permission.param.login.SysUserLoginParam;
 import com.zoudong.permission.param.user.QuerySysUserParam;
@@ -32,9 +31,6 @@ import static com.zoudong.permission.result.base.ResultUtil.fillSuccesData;
 public class AdminController {
     @Autowired
     private UserService userService;
-
-    @Autowired
-    private SysResourceMapper sysResourceMapper;
 
     @Autowired
     private SendMessageProcess sendMessageProcess;

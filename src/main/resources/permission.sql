@@ -11,7 +11,7 @@
  Target Server Version : 50720
  File Encoding         : 65001
 
- Date: 23/07/2018 18:00:18
+ Date: 27/07/2018 11:41:44
 */
 
 SET NAMES utf8mb4;
@@ -81,28 +81,6 @@ CREATE TABLE `sys_permission`  (
 -- Records of sys_permission
 -- ----------------------------
 INSERT INTO `sys_permission` VALUES (1, '1', '1', '1', '1', '2018-06-21 10:48:22', NULL, NULL, NULL, '');
-
--- ----------------------------
--- Table structure for sys_resource
--- ----------------------------
-DROP TABLE IF EXISTS `sys_resource`;
-CREATE TABLE `sys_resource`  (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `resource_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '资源名称',
-  `resource_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '资源编码',
-  `permission_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '资源挂靠权限',
-  `version` bigint(11) NULL DEFAULT NULL COMMENT '版本（乐观锁保留字段）',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
-  `status` int(65) NULL DEFAULT NULL COMMENT '资源状态 :  1:启用   0:不启用',
-  `description` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '资源备注',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of sys_resource
--- ----------------------------
-INSERT INTO `sys_resource` VALUES (1, '/permission/querySysUserByPage', '查询用户信息', '1', NULL, '2018-06-28 15:56:55', '0000-00-00 00:00:00', 1, '查询用户信息测试');
 
 -- ----------------------------
 -- Table structure for sys_role
