@@ -48,20 +48,14 @@ public class UserServiceImpl implements com.zoudong.permission.service.api.user.
     private SysRolePermissionMapper sysRolePermissionMapper;
 
     @Autowired
-    private SysMenuMapper sysMenuMapper;
-
-    @Autowired
     private SysPermissionMapper sysPermissionMapper;
 
     @Autowired
     private SysRoleMapper sysRoleMapper;
 
-    @Autowired
-    private SysDeptMapper sysDeptMapper;
-
 
     /**
-     * 无状态登录
+     * 无状态登录（通过用户名密码和验证嘛获取交互token,空了密码加密）
      *
      * @param sysUserLoginParam
      * @return
